@@ -58,6 +58,7 @@ resource "uptimerobot_monitor" "my_website" {
   - `up` - Array of HTTP status codes that make the status of the monitor up
   - `down` - Array of HTTP status codes that make the status of the monitor down
 * `timeout` - the timeout for the monitoring check (30 seconds by default). Available for HTTP, port and keyword monitoring.
+* `disable_domain_expire_notifications` - monitor and alert domain expiration (true by default). Available for HTTP and keyword monitoring.
 
 ## Attributes Reference
 

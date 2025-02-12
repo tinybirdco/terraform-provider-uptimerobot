@@ -142,6 +142,11 @@ func resourceMonitor() *schema.Resource {
 					},
 				},
 			},
+			"disable_domain_expire_notifications": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 			// TODO - mwindows
 		},
 	}
@@ -169,6 +174,8 @@ func resourceMonitorCreate(d *schema.ResourceData, m interface{}) error {
 		req.HTTPPassword = d.Get("http_password").(string)
 		req.HTTPAuthType = d.Get("http_auth_type").(string)
 		req.Timeout = d.Get("timeout").(int)
+
+		req.DisableDomainExpireNotifications = d.Get("disable_domain_expire_notifications").(bool)
 		break
 	case "http":
 		req.HTTPMethod = d.Get("http_method").(string)
@@ -176,6 +183,8 @@ func resourceMonitorCreate(d *schema.ResourceData, m interface{}) error {
 		req.HTTPPassword = d.Get("http_password").(string)
 		req.HTTPAuthType = d.Get("http_auth_type").(string)
 		req.Timeout = d.Get("timeout").(int)
+
+		req.DisableDomainExpireNotifications = d.Get("disable_domain_expire_notifications").(bool)
 		break
 	}
 
@@ -268,6 +277,8 @@ func resourceMonitorUpdate(d *schema.ResourceData, m interface{}) error {
 		req.HTTPPassword = d.Get("http_password").(string)
 		req.HTTPAuthType = d.Get("http_auth_type").(string)
 		req.Timeout = d.Get("timeout").(int)
+
+		req.DisableDomainExpireNotifications = d.Get("disable_domain_expire_notifications").(bool)
 		break
 	case "http":
 		req.HTTPMethod = d.Get("http_method").(string)
@@ -275,6 +286,8 @@ func resourceMonitorUpdate(d *schema.ResourceData, m interface{}) error {
 		req.HTTPPassword = d.Get("http_password").(string)
 		req.HTTPAuthType = d.Get("http_auth_type").(string)
 		req.Timeout = d.Get("timeout").(int)
+
+		req.DisableDomainExpireNotifications = d.Get("disable_domain_expire_notifications").(bool)
 		break
 	}
 
@@ -356,6 +369,9 @@ func updateMonitorResource(d *schema.ResourceData, m uptimerobotapi.Monitor) err
 	// d.Set("http_auth_type", m.HTTPAuthType)
 
 	d.Set("ignore_ssl_errors", m.IgnoreSSLErrors)
+
+	// UR API doesn't return this value in getMonitors
+	// d.Set("disable_domain_expire_notifications", m.DisableDomainExpireNotifications)
 
 	if err := d.Set("custom_http_headers", m.CustomHTTPHeaders); err != nil {
 		return fmt.Errorf("error setting custom_http_headers for resource %s: %s", d.Id(), err)

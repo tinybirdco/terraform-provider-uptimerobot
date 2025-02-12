@@ -888,6 +888,39 @@ func TestUptimeRobotDataResourceMonitor_default_alert_contact(t *testing.T) {
 	})
 }
 
+func TestUptimeRobotDataResourceMonitor_disable_domain_expire_notifications(t *testing.T) {
+	var FriendlyName = "TF Test: disable_domain_expire_notifications monitor"
+	var Type = "http"
+	var URL = "https://google.com"
+	resource.Test(t, resource.TestCase{
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckMonitorDestroy,
+		Steps: []resource.TestStep{
+			resource.TestStep{
+				Config: fmt.Sprintf(`
+				resource "uptimerobot_monitor" "test" {
+					friendly_name                       = "%s"
+					url                                 = "%s"
+					disable_domain_expire_notifications = true
+				}
+				`, FriendlyName, Type, URL),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("uptimerobot_monitor.test", "friendly_name", FriendlyName),
+					resource.TestCheckResourceAttr("uptimerobot_monitor.test", "url", URL),
+					resource.TestCheckResourceAttr("uptimerobot_monitor.test", "disable_domain_expire_notifications", "true"),
+				),
+			},
+			resource.TestStep{
+				ResourceName: "uptimerobot_monitor.test",
+				ImportState:  true,
+				// Disabled due disable_domain_expire_notifications not being returned in getMonitors
+				// ImportStateVerify: true,
+			},
+		},
+	})
+}
+
 func testAccCheckMonitorDestroy(s *terraform.State) error {
 	client := testAccProvider.Meta().(uptimerobotapi.UptimeRobotApiClient)
 

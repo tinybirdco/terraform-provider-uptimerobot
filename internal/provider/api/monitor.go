@@ -91,6 +91,8 @@ type Monitor struct {
 
 	IgnoreSSLErrors bool `json:"ignore_ssl_errors"`
 
+	DisableDomainExpireNotifications bool `json:"disable_domain_expire_notifications"`
+
 	CustomHTTPHeaders map[string]string
 
 	CustomHTTPStatuses MonitorRequestCustomHTTPStatuses
@@ -162,6 +164,9 @@ func (client UptimeRobotApiClient) GetMonitor(id int) (m Monitor, err error) {
 		m.HTTPUsername = monitor["http_username"].(string)
 		m.HTTPPassword = monitor["http_password"].(string)
 		m.Timeout = int(monitor["timeout"].(float64))
+
+		// UR API doesn't return this value in getMonitors
+		// m.DisableDomainExpireNotifications = monitor["disable_domain_expire_notifications"].(float64) == 1
 		break
 	case "http":
 		if val := monitor["http_auth_type"]; val != nil {
@@ -176,6 +181,9 @@ func (client UptimeRobotApiClient) GetMonitor(id int) (m Monitor, err error) {
 		m.HTTPUsername = monitor["http_username"].(string)
 		m.HTTPPassword = monitor["http_password"].(string)
 		m.Timeout = int(monitor["timeout"].(float64))
+
+		// UR API doesn't return this value in getMonitors
+		// m.DisableDomainExpireNotifications = monitor["disable_domain_expire_notifications"].(float64) == 1
 		break
 	}
 
@@ -247,6 +255,8 @@ type MonitorCreateRequest struct {
 
 	IgnoreSSLErrors bool
 
+	DisableDomainExpireNotifications bool
+
 	AlertContacts []MonitorRequestAlertContact
 
 	CustomHTTPHeaders map[string]string
@@ -294,6 +304,12 @@ func (client UptimeRobotApiClient) CreateMonitor(req MonitorCreateRequest) (m Mo
 		data.Add("ignore_ssl_errors", "1")
 	} else {
 		data.Add("ignore_ssl_errors", "0")
+	}
+
+	if req.DisableDomainExpireNotifications {
+		data.Add("disable_domain_expire_notifications", "1")
+	} else {
+		data.Add("disable_domain_expire_notifications", "0")
 	}
 
 	acStrings := make([]string, len(req.AlertContacts))
@@ -359,6 +375,8 @@ type MonitorUpdateRequest struct {
 
 	IgnoreSSLErrors bool
 
+	DisableDomainExpireNotifications bool
+
 	AlertContacts []MonitorRequestAlertContact
 
 	CustomHTTPHeaders map[string]string
@@ -402,6 +420,12 @@ func (client UptimeRobotApiClient) UpdateMonitor(req MonitorUpdateRequest) (m Mo
 		data.Add("ignore_ssl_errors", "1")
 	} else {
 		data.Add("ignore_ssl_errors", "0")
+	}
+
+	if req.DisableDomainExpireNotifications {
+		data.Add("disable_domain_expire_notifications", "1")
+	} else {
+		data.Add("disable_domain_expire_notifications", "0")
 	}
 
 	acStrings := make([]string, len(req.AlertContacts))
