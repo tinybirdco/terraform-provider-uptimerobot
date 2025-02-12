@@ -1,4 +1,4 @@
-module github.com/lapras-inc/terraform-provider-uptimerobot
+module github.com/tinybirdco/terraform-provider-uptimerobot
 
 go 1.17
 

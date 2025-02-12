@@ -8,7 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-	uptimerobotapi "github.com/lapras-inc/terraform-provider-uptimerobot/internal/provider/api"
+	uptimerobotapi "github.com/tinybirdco/terraform-provider-uptimerobot/internal/provider/api"
 )
 
 func TestUptimeRobotDataResourceStatusPage_basic(t *testing.T) {
